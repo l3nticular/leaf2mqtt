@@ -1,0 +1,21 @@
+version: "3"
+
+services:
+  leaf2mqtt:
+    container_name: leaf2mqtt
+    build: .
+    image: local/leaf2mqtt:01
+    logging:
+      options:
+        max-size: "1M"
+        max-file: "5"
+    environment:
+      LEAF_USERNAME: '<MY_USERNAME>'
+      LEAF_PASSWORD: '<MY_PASSWORD>'
+      LEAF_TYPE: '<SEE_README>'
+      MQTT_HOST: '<MY_MQTT_HOST>'
+      UPDATE_INTERVAL_MINUTES: 45
+      CHARGING_UPDATE_INTERVAL_MINUTES: 5
+      LOG_LEVEL: 'ALL'
+    restart: unless-stopped
+

@@ -1,0 +1,22 @@
+FROM ubuntu:20.04
+ENV DEBIAN_FRONTEND noninteractive
+
+RUN apt-get update && apt-get install -y \
+	apt-transport-https mosquitto wget gnupg2 git mosquitto-clients curl unzip && \
+	rm -rf /var/lib/apt/lists/*
+
+RUN curl https://storage.googleapis.com/dart-archive/channels/stable/release/2.12.0/sdk/dartsdk-linux-arm-release.zip -o dart.zip && unzip dart.zip && rm dart.zip
+
+ENV PATH="${PATH}:/dart-sdk/bin"
+WORKDIR /app
+
+ADD pubspec.* /app/
+RUN pub get
+ADD . /app
+RUN pub get --offline
+
+RUN apt-get purge -y apt-transport-https wget gnupg2 git && rm -rf /var/lib/apt/lists/*
+RUN apt-get autoremove --purge -y
+
+ENTRYPOINT ["dart", "src/leaf_2_mqtt.dart"]
+
