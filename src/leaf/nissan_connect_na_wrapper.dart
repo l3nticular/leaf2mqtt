@@ -7,6 +7,7 @@ import 'leaf_session.dart';
 import 'leaf_vehicle.dart';
 
 final Logger _log = Logger('NissanConnectNASessionWrapper');
+final String agent = 'CFNetwork/897.15 Darwin/17.5.0 (iPhone/6s iOS/11.3)';
 
 class NissanConnectNASessionWrapper extends LeafSessionInternal {
   NissanConnectNASessionWrapper(this._countryCode, String username, String password)
@@ -18,7 +19,7 @@ class NissanConnectNASessionWrapper extends LeafSessionInternal {
   @override
   Future<void> login() async {
     _session = NissanConnectSession(debug: _log.level <= Level.FINER);
-    await _session.login(username: username, password: password, countryCode: _countryCode);
+    await _session.login(username: username, password: password, countryCode: _countryCode, userAgent: agent);
 
     final List<VehicleInternal> newVehicles = _session.vehicles.map((NissanConnectVehicle vehicle) =>
       NissanConnectNAVehicleWrapper(vehicle)).toList();
